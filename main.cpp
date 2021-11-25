@@ -9,7 +9,7 @@
 #include "Pusher/PushDeal.h"
 
 int main() {
-    std::cout << "System Init!" << std::endl;
+    std::cout << "System Init !" << std::endl;
     std::vector<std::string> brandList;
     brandList.push_back("hk");
     CameraFactory::getInstance()->initCamera(brandList);

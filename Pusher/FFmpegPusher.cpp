@@ -29,7 +29,9 @@ extern "C"
 #endif
 #endif
 
-    static  bool isInitFFmpeg = false;
+#define PUSHBUFFSIZE 8192
+
+static bool isInitFFmpeg = false;
 
 FFmpegPusher::FFmpegPusher() {
     ringBufferS = new ring_buffer_s(32768 * 10);
@@ -60,8 +62,7 @@ void *FFmpegPusher::start_thread(void *pArgs) {
 }
 
 void FFmpegPusher::push_stream_thread() {
-    if (!isInitFFmpeg)
-    {
+    if (!isInitFFmpeg) {
         av_register_all();
         //Network
         avformat_network_init();
@@ -69,8 +70,8 @@ void FFmpegPusher::push_stream_thread() {
     }
 
     while (!m_exit) {
-        while (ringBufferS->size() < 32768 * 3) {
-            std::cout << "---- ringBufferS not end" << ringBufferS->size() << std::endl;
+        while (ringBufferS->size() < PUSHBUFFSIZE * 4 ) {
+            std::cout << "---- ringBufferS not end " << ringBufferS->size() << std::endl;
             std::this_thread::sleep_for(std::chrono::milliseconds(3));
         }
 
@@ -91,9 +92,9 @@ void FFmpegPusher::push_stream_thread() {
         /*内存*/
         ifmt_ctx = avformat_alloc_context();
         unsigned char *inbuffer = NULL;
-        inbuffer = (unsigned char *) av_malloc(32768);
+        inbuffer = (unsigned char *) av_malloc(PUSHBUFFSIZE);
         AVIOContext *avio_in = NULL;
-        avio_in = avio_alloc_context(inbuffer, 32768, 0, this, read_buffer, NULL, NULL);
+        avio_in = avio_alloc_context(inbuffer, PUSHBUFFSIZE, 0, this, read_buffer, NULL, NULL);
         if (avio_in == NULL)
             goto end;
 
@@ -176,8 +177,14 @@ void FFmpegPusher::push_stream_thread() {
             AVStream *in_stream, *out_stream;
             //Get an AVPacket
             ret = av_read_frame(ifmt_ctx, &pkt);
-            if (ret < 0)
-                break;
+            if (ret < 0) {
+                std::cout << "av_read_frame error ring size :" << ringBufferS->size() << std::endl;
+                //没数据了 等几毫秒
+                std::this_thread::sleep_for(std::chrono::milliseconds(10));
+                continue;
+//                break;
+            }
+
             //FIX：No PTS (Example: Raw H.264)
             //Simple Write PTS
             if (pkt.pts == AV_NOPTS_VALUE) {
@@ -253,9 +260,8 @@ int FFmpegPusher::read_buffer(void *opaque, uint8_t *buf, int buf_size) {
 int FFmpegPusher::readBuffer(uint8_t *buf, int buf_size) {
     int trueReadlen = ringBufferS->read(buf, buf_size);
     ringReadCount++;
-    if(ringReadCount % 50==0)
-    {
-        printf("port %d readbuff %d cache %d \n",m_port,trueReadlen,ringBufferS->size());
+    if (ringReadCount % 50 == 0) {
+        printf("port %d readbuff %d cache %d \n", m_port, trueReadlen, ringBufferS->size());
     }
 
     return trueReadlen;

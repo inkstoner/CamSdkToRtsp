@@ -15,6 +15,9 @@ link_directories(./thirdpart/x86-jsoncpp/lib)
 include_directories(./thirdpart/ffmpeg_linux/include)
 link_directories(./thirdpart/ffmpeg_linux/lib)
 
+include_directories(./thirdpart/zlog/include)
+link_directories(./thirdpart/zlog/lib)
+
 add_executable(SDKToRtsp main.cpp
         RtspSrv/StreamUnpack.h
         RtspSrv/StreamUnpack.cpp
