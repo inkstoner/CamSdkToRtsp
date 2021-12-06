@@ -173,7 +173,7 @@ void FFmpegPusher::push_stream_thread() {
         }
 
         start_time = av_gettime();
-        while (1) {
+        while (!m_exit) {
             AVStream *in_stream, *out_stream;
             //Get an AVPacket
             ret = av_read_frame(ifmt_ctx, &pkt);
