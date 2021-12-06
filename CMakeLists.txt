@@ -3,6 +3,8 @@ project(SDKToRtsp)
 
 set(CMAKE_CXX_STANDARD 11)
 
+set(CMAKE_CXX_FLAGS_RELEASE "$ENV{CXXFLAGS} -O3 -Wall -fpermissive")
+
 include_directories(./thirdpart/hikvision_linux/incCn)
 link_directories(./thirdpart/hikvision_linux/lib)
 
