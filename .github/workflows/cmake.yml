@@ -21,8 +21,8 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
-#    - name: 安装依赖库
-#      run: sudo apt-get update && sudo apt-get install -y libvpx-dev libfdk-aac-dev libva-dev libmp3lame-dev libopus-dev libx264-dev
+    - name: 安装依赖库
+      run: sudo apt-get update && sudo apt-get install -y libmp3lame-dev libopus-dev
 
     - name: Configure CMake
       # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
