@@ -246,7 +246,8 @@ void FFmpegPusher::push_stream_thread() {
 //        av_free(inbuffer);
         if (ret < 0 && ret != AVERROR_EOF) {
             printf("Error occurred.\n");
-            return;
+            continue;
+//            return;
         }
     }
 }

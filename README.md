@@ -32,5 +32,8 @@ TODO：
     <https://github.com/leixiaohua1020/simplest_ffmpeg_streamer>  
     感谢雷神!!!  
 
+    非常轻型的TS和PS封装与解封装代码
+    <https://github.com/xphh/litets>
+
 三方库
     jsoncpp、ffmpeg、zlog

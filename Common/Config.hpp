@@ -148,17 +148,12 @@ private:
     }
 
     void genDemoConfig() {
-//        "ip" : "192.168.0.192",
-//                "isOpen" : true,
-//                "password" : "1qaz2wsx",
-//                "port" : 8000,
-//                "username" : "admin"
 
         SRCam::stCameraInfo cameraInfo;
-        cameraInfo.ip = "192.168.0.208";
+        cameraInfo.ip = "192.168.1.88";
         cameraInfo.port = 8000;
         cameraInfo.username = "admin";
-        cameraInfo.password = "12qwaszx";
+        cameraInfo.password = "admin";
         cameraInfo.brand = "hk";
         cameraInfo.isOpen = true;
 
@@ -180,7 +175,7 @@ private:
     std::vector<SRCam::stCameraInfo> m_cameraInfos;
 
     std::string mode = "PushMode";
-    std::string pushServer = "192.168.0.58";
+    std::string pushServer = "192.168.1.58";
 };
 
 #endif //CONFIG_H
